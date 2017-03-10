@@ -159,7 +159,6 @@ public class Paillier {
     	BigInteger k=new BigInteger("1");
     	for(BigInteger i = new BigInteger("0") ;!i.equals(log(num));i=i.add(new BigInteger("1")))
     	{
-    		System.out.println(i);
     		sum = sum.multiply(sum);
     	}
     	BigInteger j=num.subtract(base.pow(log(num).intValue()));
