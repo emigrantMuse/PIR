@@ -4,6 +4,7 @@ package nankai.minioram.common;
   
 import java.math.*;  
 import java.util.*;  
+import java.math.BigInteger;
   
 
 public class Paillier {  
@@ -137,17 +138,32 @@ public class Paillier {
     public BigInteger cipher_add(BigInteger em1, BigInteger em2) {  
         return em1.multiply(em2).mod(nsquare);  
     }  
-    
-    public BigInteger cipher_multiply(BigInteger num, BigInteger em2) {
-    	BigInteger sum = new BigInteger("1");
-    	BigInteger gen = cipher_add(em2, em2);
+    /*lvsiyi--为大数取模2运算*/
+    public static BigInteger log(BigInteger num){
+    	BigInteger k=new BigInteger("0");
+    	BigInteger h=new BigInteger("1");
+    	BigInteger d=new BigInteger("2");
+    	BigInteger m=new BigInteger("0");
+    	do{
+    		num=num.divide(d);
+    		k=k.add(h);
+    	}while(!num.equals(m));
+    	k=k.subtract(h);
+    	return k;
+    }
+    public static BigInteger cipher_multiply(BigInteger num, BigInteger em2) {
+    	BigInteger sum = new BigInteger("2");
+    	BigInteger base=new BigInteger("2");
+    	//BigInteger gen = cipher_add(em2, em2);
     	BigInteger[] rem = num.divideAndRemainder(new BigInteger("2"));
-    	
-    	for(BigInteger i = new BigInteger("0") ;num.compareTo(num) < 0; i.add(new BigInteger("1")))
+    	BigInteger k=new BigInteger("1");
+    	for(BigInteger i = new BigInteger("0") ;!i.equals(log(num));i=i.add(new BigInteger("1")))
     	{
+    		System.out.println(i);
     		sum = sum.multiply(sum);
     	}
-    	if(rem[1].equals(new BigInteger("1")))
+    	BigInteger j=num.subtract(base.pow(log(num).intValue()));
+    	for(BigInteger i=new BigInteger("0");i.compareTo(j)<0;i=i.add(new BigInteger("1")))
     	{
     		sum = sum.multiply(em2);
     	}
@@ -160,7 +176,10 @@ public class Paillier {
      * @param str 
      *            intput string 
      */  
-    public static void main(String[] str) {  
+    public static void main(String[] str) {
+    	BigInteger test=new BigInteger("10");
+    	System.out.println(log(test));
+    	System.out.println(cipher_multiply(new BigInteger("10"), new BigInteger("2")));
         /* instantiating an object of Paillier cryptosystem */  
         Paillier paillier = new Paillier();  
         /* instantiating two plaintext msgs */  
